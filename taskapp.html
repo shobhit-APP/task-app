@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modern Task App</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Inter", sans-serif;
+        display: flex;
+        height: 100vh;
+        overflow: hidden;
+        background-color: #f8fafc;
+      }
+
+      .sidebar {
+        width: 280px;
+        background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+        color: white;
+        padding: 24px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+
+      .sidebar h1 {
+        font-size: 24px;
+        text-align: center;
+        margin-bottom: 32px;
+        font-weight: 600;
+        background: linear-gradient(135deg, #60a5fa, #3b82f6);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .sidebar ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .sidebar ul li {
+        padding: 16px;
+        border-radius: 12px;
+        cursor: pointer;
+        margin-bottom: 12px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 500;
+      }
+
+      .sidebar ul li i {
+        font-size: 18px;
+      }
+
+      .sidebar ul li:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        transform: translateX(5px);
+      }
+
+      .main-content {
+        flex: 1;
+        padding: 32px;
+        overflow-y: auto;
+        background-color: #f8fafc;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 32px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .header h2 {
+        font-size: 28px;
+        color: #1e293b;
+        font-weight: 600;
+      }
+
+      .welcome-message {
+        font-size: 16px;
+        color: #64748b;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .task-input {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+
+      .task-input input {
+        flex: 1;
+        padding: 16px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        background-color: white;
+      }
+
+      .task-input input:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+
+      .task-input button {
+        padding: 16px 24px;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .task-input button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+      }
+
+      .task-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .task-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        background-color: white;
+        border-radius: 16px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        animation: slideIn 0.3s ease;
+      }
+
+      .task-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .task-item button {
+        padding: 8px 16px;
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .task-item button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 48px;
+        color: #64748b;
+        animation: fadeIn 0.3s ease;
+      }
+
+      .empty-state i {
+        font-size: 48px;
+        margin-bottom: 16px;
+        color: #94a3b8;
+      }
+
+      .completed {
+        text-decoration: line-through;
+        opacity: 0.7;
+      }
+
+      .task-checkbox {
+        width: 20px;
+        height: 20px;
+        margin-right: 12px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar">
+      <h1>Task App</h1>
+      <ul>
+        <li><i class="fas fa-tasks"></i>My Tasks</li>
+        <li><i class="fas fa-home"></i>Dashboard</li>
+      </ul>
+    </div>
+
+    <div class="main-content">
+      <div class="header">
+        <h2>Dashboard</h2>
+        <div class="welcome-message">
+          <i class="fas fa-user-circle"></i>
+          Welcome back, User!
+        </div>
+      </div>
+      <div class="task-input">
+        <input type="text" id="taskInput" placeholder="Add a new task..." />
+        <button onclick="addTask()">
+          <i class="fas fa-plus"></i>
+          Add Task
+        </button>
+      </div>
+      <div class="task-list" id="taskList">
+        <div class="empty-state">
+          <i class="fas fa-clipboard-list"></i>
+          <p>No tasks yet. Add a new task to get started!</p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const taskList = document.getElementById("taskList");
+      let tasksCount = 0;
+
+      function addTask() {
+        const taskInput = document.getElementById("taskInput");
+        const taskValue = taskInput.value.trim();
+
+        if (taskValue === "") {
+          alert("Please enter a task!");
+          return;
+        }
+
+        if (tasksCount === 0) {
+          taskList.innerHTML = ""; // Clear empty state
+        }
+
+        const taskItem = document.createElement("div");
+        taskItem.className = "task-item";
+
+        const leftSection = document.createElement("div");
+        leftSection.style.display = "flex";
+        leftSection.style.alignItems = "center";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.className = "task-checkbox";
+        checkbox.onclick = () => toggleComplete(taskText);
+
+        const taskText = document.createElement("span");
+        taskText.textContent = taskValue;
+
+        const deleteButton = document.createElement("button");
+        deleteButton.innerHTML = '<i class="fas fa-trash"></i> Delete';
+        deleteButton.onclick = () => {
+          taskItem.style.animation = "slideIn 0.3s ease reverse";
+          setTimeout(() => {
+            taskItem.remove();
+            tasksCount--;
+            if (tasksCount === 0) {
+              showEmptyState();
+            }
+          }, 300);
+        };
+
+        leftSection.appendChild(checkbox);
+        leftSection.appendChild(taskText);
+        taskItem.appendChild(leftSection);
+        taskItem.appendChild(deleteButton);
+        taskList.appendChild(taskItem);
+
+        taskInput.value = "";
+        tasksCount++;
+      }
+
+      function toggleComplete(element) {
+        element.classList.toggle("completed");
+      }
+
+      function showEmptyState() {
+        taskList.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-clipboard-list"></i>
+            <p>No tasks yet. Add a new task to get started!</p>
+          </div>
+        `;
+      }
+    </script>
+  </body>
+</html>
